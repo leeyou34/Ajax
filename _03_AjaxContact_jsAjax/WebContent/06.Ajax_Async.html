@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - 비동기 방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			console.log("1 page 요청");
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				//비동기방식에서는 요청을 한 번에 보낸 후 먼저 온 응답부터 처리
+				url : "/contact/list_long.do",
+				//메소드 타입 지정
+				type : "GET",
+				//비동기 방식 사용 설정
+				async : true,
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 1, pagesize : 5 },
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log("1 page 응답");
+					console.log(data);
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				}
+			});
+			
+			//1번 요청 응답이 오지 않아도 2, 3번 요청 실행
+			console.log("2 page 요청");
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				url : "/contact/list.do",
+				//메소드 타입 지정
+				type : "GET",
+				//비동기 방식 사용 설정
+				async : true,
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 2, pagesize : 5 },
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log("2 page 응답");
+					console.log(data);
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				}
+			});
+			
+			console.log("3 page 요청");
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				url : "/contact/list.do",
+				//메소드 타입 지정
+				type : "GET",
+				//비동기 방식 사용 설정
+				async : true,
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 3, pagesize : 5 },
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log("3 page 응답");
+					console.log(data);
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				}
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

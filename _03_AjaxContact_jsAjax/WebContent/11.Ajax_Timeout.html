@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				//2초간 지연 발생(2초간 응답이 없음)
+				url : "/contact/list_long.do",
+				//메소드 타입 지정
+				type : "GET",
+				//1.9초동안 응답오지 않으면 요청 중단시키고, 에러 콜백 함수 실행(요청 실패했다는 의미)
+				timeout : 1900,
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 1, pagesize : 5 },
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log(data);
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				},
+				error : function(xhr, status, error) {
+					console.log("status : " + status + ", error : " + error);
+				}
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

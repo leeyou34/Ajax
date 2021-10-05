@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - 단축 메소드</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">get 조회-1</button>
+	<button type="button" onclick="reqList2();">get 조회-2</button>
+	<button type="button" onclick="reqList3();">post 요청-1</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//get방식의 단축 메소드 사용
+			$.get("/contact/list.do", function(data) {
+				$("#resp").html(data);
+			});
+		}
+		
+		function reqList2() {
+			//get방식의 단축 메소드 사용
+			$.get({
+				url : "/contact/list_long.do",
+				data : { pageno : 2, pagesize : 5 },
+				timeout : 1900,
+				success : function(data) {
+					$("#resp").html(data);
+				},
+				error : function(xhr, status, error) {
+					$("#resp").html(status + ", " + error);
+				}
+			});
+		}
+		
+		function reqList3() {
+			var param = {};
+			param.name = "임꺽정";
+			param.tel = "010-1111-2222";
+			param.address = "장길산";
+			//post방식의 단축 메소드 사용
+			$.post("/contact/add.do", param, function(data) {
+				$("#resp").html(data);
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

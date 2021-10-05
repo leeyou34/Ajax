@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>XHR 객체 직접사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//XHR 객체 생성
+			var xhr = new XMLHttpRequest();
+			
+			//데이터가 수신되면 XHR 객체에 callback 함수 등록
+			xhr.onreadystatechange = function() {
+				console.log(xhr.readyState);
+				//0=초기화, 1=로딩중, 2=로딩됨, 3=대화상태, 4=전송완료 : 전송상태
+				if(xhr.readyState == 4) {
+					//에러상태 200=에러 없음, 404=페이지 찾을 수 없음 ....
+					if(xhr.status == 200) {
+						//전송된 데이터 텍스트로 받음
+						var data = xhr.responseText;
+						console.log(data);
+						//dom객체를 이용해서 전송된 데이터를 화면에 표출
+						document.getElementById("resp").innerHTML = data;
+					}
+				}
+			};
+			
+			//XHR 객체 오픈
+			//메소드 방식, 주소, 동기방식(비동기=true, 동기=false)
+			xhr.open("GET", "/contact/list.do", true);
+			//XHR 객체 전송
+			xhr.send();
+		}
+		
+		function delList() {
+			//dom객체를 이용해서 화면에 표출된 내용 삭제
+			document.getElementById("resp").innerHTML = "";
+		}
+	</script>
+</body>
+</html>

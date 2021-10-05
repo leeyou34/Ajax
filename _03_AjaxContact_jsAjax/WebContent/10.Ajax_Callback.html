@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		//성공 : beforeSend -> success -> complete
+		//실패 : beforeSend -> error -> complete
+		function reqList() {
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				url : "/contact/list2.do",
+				//메소드 타입 지정
+				type : "GET",
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 1, pagesize : 5 },
+				//요청 전송 전에 실행될 콜백 함수 지정
+				beforeSend : function(xhr, settings) {
+					console.log("before Send");
+				},
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log("success");
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				},
+				//요청 실패 시 실행될 콜백 함수 지정
+				error : function(xhr, status, error) {
+					console.log("error : " + error + ", status : " + status);
+				},
+				//요청 완료 시 실행될 콜백 함수 지정
+				//요청 성공/실패 여부와 관계없이 무조건 실행
+				complete : function(xhr, status) {
+					console.log("complete");
+				}
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

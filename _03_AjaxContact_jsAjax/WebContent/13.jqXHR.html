@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//ajax 호출
+			//ajax 호출 후 리턴되는 jqXHR 객체를 변수로 담음
+			var jqXHR = $.ajax({
+				//요청 서비스 url 지정
+				url : "/contact/list_long.do",
+				//메소드 타입 지정
+				type : "GET",
+				timeout : 1900,
+				//요청 시 서버로 전달할 데이터 지정
+				data : { pageno : 1, pagesize : 5 }
+			});
+			
+			//done() == success 콜백 함수
+			jqXHR.done(function(data, status, xhr) {
+				console.log("done");
+				console.log(data);
+			});
+			
+			//fail() == error 콜백 함수
+			jqXHR.fail(function(xhr, status, error) {
+				console.log("fail");
+				console.log(status + ", " + error);
+			});
+			
+			//always() == complete 콜백 함수
+			jqXHR.always(function() {
+				console.log("always");
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

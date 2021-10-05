@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//아래처럼 순서를 동기화하여 ajax를 호출하려면 콜백 함수 안에서
+			//다음 ajax를 계속 호출해야되는데 소드코드의 가독성이 떨어지고 분석하기 힘들어진다
+			//이러한 경우를 콜백 지옥이라고 부름
+			console.log("Send Page1");
+			//첫 번째 ajax 호출
+			$.get("/contact/list_long.do", { pageno : 1 }, function(data) {
+				console.log("page1 success : " + (new Date()).toLocaleTimeString());
+				console.log(data);
+				
+				console.log("Send Page2");
+				//두 번째 ajax 호출
+				$.get("/contact/list_long.do", { pageno : 2 }, function(data) {
+					console.log("page2 success : " + (new Date()).toLocaleTimeString());
+					console.log(data);
+					
+					console.log("Send Page3");
+					//세 번째 ajax 호출
+					$.get("contact/list_long.do", { pageno : 3 }, function(data) {
+						console.log("page3 success : " + (new Date()).toLocaleTimeString());
+						console.log(data);
+					});
+				});
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

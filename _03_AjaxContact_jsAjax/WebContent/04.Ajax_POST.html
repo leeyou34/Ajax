@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - POST방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">등록</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//ajax 호출
+			$.ajax({
+				//요청 서비스 url 지정
+				url : "/contact/add.do",
+				//메소드 타입 지정
+				type : "POST",
+				//요청 시 서버로 전달할 데이터 지정
+				data : { no : 65, name : "유역비", tel : "010-1111-2222", address : "중국" },
+				//요청 성공 시 동작할 콜백 함수 지정
+				success : function(data) {
+					console.log(data);
+					//p요소에 서버로부터 응답받은 데이터 표출
+					$("#resp").html(data);
+				}
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>
