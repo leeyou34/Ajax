@@ -1,0 +1,15 @@
+Servlet
+ - 웹 페이지를 동적으로 생성하기 위한 서버 프로그램
+ - JAVA 소스에 HTML소스가 추가되는 형식이다
+ - 복잡하고 어렵다.
+ - 데이터 처리에 적합
+
+JSP(JAVA Server Page)
+ - 웹 페이지를 동적으로 생성하기 위한 서버 프로그램
+ - HTML소스에 JAVA소스가 추가되는 형식이다
+ - Servlet보다 쉽고 간편하다.
+ - 화면 처리에 적합
+
+MVC(Model View Controller) 패턴
+ - 데이터 처리에 적합한 Sevlet은 Controller 역할
+ - 화면 구현이 용이한 JSP는 View 역할만 하도록 분리

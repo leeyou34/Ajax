@@ -1,0 +1,146 @@
+1. Ajax 란?
+ - Ajax는 자바스크립트를 이용해 서버와 비동기 방식으로 데이터를 주고 받을 수 있는 통신 기능
+ - 서버에 요청을 보낼 때 데이터 단위로 보내기 때문에 화면 전체를 새로고침할 필요없이 원하는
+   부분만 새로고침이 가능(XMLHTTPRequest 객체 사용)
+ - 전통적인 웹 어플리케이션(JSP/Servlet)에서는 페이지 단위로 서버에 요청에 보내기때문에
+   화면 전체가 새로고침
+ - A(Asychronous) : 비동기 방식을 사용하겠다는 의미
+ - jax(Javacript And XML) : 자바스크립트와 XMLHTTPRequest객체를 이용해 화면을 동적으로 
+                            구성하겠다는 의미
+
+2. 전통적인 웹 어플리케이션(JSP/Servlet)
+ - JSP(Java Server Page) : 웹 페이지를 동적으로 생성하기 위한 서버 프로그램
+                           HTML소스에 JAVA소스를 추가하는 방식
+                           JSP소스에는 HTML 태그들을 사용할 수 있기 때문에 화면구성이 편하고 용이
+                           화면구성 소스에 적합.
+ - Servlet : 웹 페이지를 동적으로 생성하기 위한 서버 프로그램
+             JAVA소스에 HTML소스를 추가하는 방식
+             화면구성을 위한 HTML소스 추가하는 방식이 복잡하고 어려움
+             데이터처리에 적합.
+
+3. MVC(Model View Controller) 패턴
+ - Model : 데이터베이스에 접근하여 데이터 처리를 하는 객체
+           데이터베이스에서 추출한 데이터나 입력할 데이터를 가공하는 부분
+           화면 구성 소스를 완전히 배제한 순수한 JAVA 소스로 구성 가능
+           대부분의 업무로직을 Model영역에 구현함
+           VO(Value Object) = DTO(Data Transfer Object)
+           Service(업무로직 구현)
+           DAO(Data Access Object)
+ - View : 사용자에게 표출되는 화면 영역.
+          데이터베이스에서 추출한 데이터들을 사용자에게 표출함
+          HTML, CSS, Javascript로 소스가 구성. 가끔 JAVA소스 추가
+          JSP, PHP, ASP, HTML 등등
+ - Controller : View와 Model을 연결해주는 중간다리 역할
+                Model에서 받아온 데이터를 View 전달하거나 View에서 사용자가 입력한 데이터를
+                Model로 전달하는 역할
+                Servlet객체를 사용해서 View와 Model 연결
+
+4. XMLHTTPRequest(XHR) 객체
+ - 서버와 데이터를 주고 받기 위해 사용하는 객체
+ - 데이터 단위로 서버에 요청을 하기 때문에 화면의 일부분만 새로고침 가능
+ - XHR 객체를 직접 사용 : 소스코드 구성이 복잡하고 어려운 단점이 있음
+   Ajax를 통한 XHR 객체 사용 : 브라우저 -> Ajax -> XHR 객체 -> 서버와 통신
+                              XHR 객체를 직접 사용하는 것보다 소스코드 구성이 간단하여 주로 사용
+
+5. Ajax 기본형
+ - $.ajax({
+     settings : 설정 값들
+     (서버에 요청할 url, 메소드 방식, 비동기 여부 등등)
+   });
+ - Ajax 호출 후 리턴 값은 jqXHR(jquery XMLHTTPRequest) 객체
+
+6. Ajax 설정 값들
+ - $.ajax({
+       /*설정 값들 영역*/
+       url : 요청할 서비스 url('/list.do'),
+       type : 메소드 타입 지정('POST', 'GET', 'PUT', 'DELETE', 기본 값 : 'GET'),
+       async : 비동기 방식/동기 방식 지정(true : 비동기 방식, false : 동기 방식),
+       data : 서버로 전달할 데이터를 입력.
+              문자열, 배열, 객체 형식 지원
+              문자열인 경우 직접 url 인코딩을 해야됨(한글/특수문자 유니코드로 변경)
+              ex) "keyword=%EC%98%A4&mode=2"
+                  [ 
+                      { name : "keyword", value : "오" }, 
+                      { name : "keyword", value : "2" } 
+                  ]
+                  {
+                      "keyword" : "오",
+                      "mode" : 2
+                  }
+       contentType : 서버로 전달할 데이터의 형식 지정
+                     기본 값 : application/x-www-form-urlencoded -> url인코딩된 폼 데이터 형식("keyword=%EC%98%A4&mode=2")
+                     ex) application/json -> json 타입의 데이터 형식
+       dataType : 서버로부터 응답받은 데이터의 형식 지정(기본 값 : 자동 추정)
+                  xml, json, script, html 등 지정 가능
+       statusCode : 서버로부터 전달받은 응답코드 값에 대한 콜백 함수 지정
+                    ex) statusCode : {
+                            404 : function() {
+                                alert("페이지를 찾을 수 없습니다.");
+                            },
+                            200 : function() {
+                                alert("정상 처리되었습니다.");
+                            }
+                        }
+       timeout : 요청 제한시간을 지정.
+                 지정한 시간 이내에 응답이 오지않으면 요청을 중단하고 요청시간이 초과됐다는
+                 timeout 오류를 표출(ms단위로 지정)
+                 ex) timeout : 1900
+       headers : 요청 시 서버로 전달할 헤더 내용 값들 지정.
+                 HTTP 헤더에 포함되는 내용 지정 가능(요청 url, 메소드 타입, 브라우저 정보, 요청 권한 등등)
+                 ex) hearders : { Authorization : "token값", Accept : "application/json" }
+       /*콜백 함수 영역*/
+       beforeSend : function(xhr, settings) {
+           alert("전송 전 실행");
+       } : 요청을 서버로 전송하기 전에 실행되는 콜백 함수
+           xhr : XHR 객체
+           settings : ajax 호출 시 지정한 설정 값들
+       success : function(data, status, xhr) {
+           alert("요청 성공!");
+           console.log(data);
+       } : 요청이 성공했을 때 실행되는 콜백 함수
+           data : 서버로부터 응답받은 데이터
+           status : 요청 상태 정보를 문자열로 전달받는 매개변수("success")
+           try catch finally : try구문에 해당하는 영역
+       error : function(xhr, status, error) {
+           alert("요청 실패!");
+           console.log(error);
+       } : 요청이 실패했을 때 실행되는 콜백 함수
+           status : 요청 상태 정보를 문자열로 전달받는 매개변수("timeout", "error", "abort" 등)
+           error : 에러 정보를 문자열로 전달받는 매개변수
+           try catch finally : catch구문에 해당하는 영역
+       complete : function(xhr, status) {
+           alert("요청 완료!");
+       } : 요청이 완료됐을 때 실행되는 콜백 함수
+           요청의 성공/실패 여부와 상관없이 항상 실행되는 콜백 함수
+           try catch finally : finally구문에 해당하는 영역
+   });
+
+7. Ajax 단축 메소드
+ - Ajax 사용하기는 편하지만 설정값들이 많고 복잡하여서 간편하게 사용할 수 있는 단축메소드를 지원
+ - 단축 메소드 종류
+   $.get() : GET 방식의 요청을 전송하고 서버로부터 데이터를 받아옴
+             $.get(url, successCallback);
+             ex) $.get("/contact/list.do", function(data) {
+                     console.log(data);
+                 });
+             $.get(url, data, successCallback);
+             ex) $.get("/contact/list.do", { pageno : 1, pagesize : 15 }, function(data) {
+                     console.log(data);
+                 });
+             $.get({
+                 settings
+             });
+             ex) $get({
+                    url : "contact/list.do",
+                    data : { pageno : 1, pagesize : 5 },
+                    success : function(data) {
+                        console.log(data);
+                    }
+                 });
+   $.post() : POST 방식의 요청을 전송하고 서버로부터 데이터를 받아옴
+              $.post(url, successCallback);
+              $.post(url, data, successCallback);
+              $.post({
+                  settings
+              });
+   $.getJSON() : GET 방식으로 JSON 형식의 인코딩된 데이터를 로딩
