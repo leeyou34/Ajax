@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		//Ajax 전역 이벤트 함수 등록
+		$(document).ready(function() {
+			$(document).ajaxStart(function() {
+				console.log("ajaxStart");
+			}).ajaxStop(function() {
+				console.log("ajaxStop");
+			}).ajaxSend(function() {
+				console.log("ajaxSend");
+			}).ajaxSuccess(function() {
+				console.log("ajaxSuccess");
+			}).ajaxComplete(function() {
+				console.log("ajaxComplete");
+			});
+		}); 
+	
+		function reqList() {	
+			$.get({
+				url : "/contact/list.do",
+				beforeSend : function() {
+					console.log("Ajax-1 beforeSend : list.do");
+				},
+				success : function() {
+					console.log("Ajax-1 success : list.do");
+				},
+				complete : function() {
+					console.log("Ajax-1 complete : list.do");
+				}
+			});
+			
+			$.get({
+				url : "/contact/list_long.do",
+				beforeSend : function() {
+					console.log("Ajax-1 beforeSend : list_long.do");
+				},
+				success : function() {
+					console.log("Ajax-1 success : list_long.do");
+				},
+				complete : function() {
+					console.log("Ajax-1 complete : list_long.do");
+				}
+			});
+
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		// 비동기 전송이기 때문에 버튼을 여러 번 누르면 Ajax요청이 여러번 발생
+		// 전송중일 때는 버튼을 눌러도 재요청이 안되도록 설정
+		// 
+		$(document).ready(function() {
+			//현재 전송중인지 아닌지를 체크하기 위한 객체 선언
+			var currentRequest= {};
+			
+			$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+				//ajax요청에서  abortOnRetry 속성을 불러옴
+				if(options.abortOnRetry) {
+					if(currentRequest[options.url]) {
+						//현재 ajax 요청 취소
+						jqXHR.abort();
+						console.log("abort Request");
+					} else {
+						currentRequest[options.url] = jqXHR;
+					}
+				}
+			});
+			
+			$(document).ajaxComplete(function(e, jqxhr, options) {
+				//ajax 요청 완료시  currentRequest 객체의 options.url 속성 제거
+				if(options.abortOnRetry) {
+					//delete: 개겣 속성 제거 연산자
+					delete currentRequest[options.url];
+				}
+			});
+		}); 
+		
+		var count =0;	
+		function reqList() {	
+			$.get({
+				url : "/contact/list_long.do",
+				//사용자 정의  속성
+				abortOnRetry : true,
+				beforeSend : function(xhr, settings) {
+					count++;
+					console.log("send" + count + "Request");
+				},
+				success: function(data) {
+					console.log("success " + count + "Request");
+					console.log(data);
+				},
+				error: function(xhr, status, error) {
+					console.log("error" + count + "Request");
+				}
+			});
+							
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

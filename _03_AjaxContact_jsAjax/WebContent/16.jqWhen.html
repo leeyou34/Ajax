@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - when(method</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		function reqList() {
+			//when () 메소드를 통해 호출할 ajax 2개 선언
+			var jqXHR0 = $.get("/contact/list_long.do", { pageno : 1});
+			var jqXHR1 = $.get("/contact/list.do", {pageno: 3, pagesize: 5});
+			
+			//data0, data1 -> 데이터 타입은 Array객체
+			//data0[0], data1[0] -> String type
+			//JSON.parse() -> String을 Json 객체로 변환
+			
+			$.when(jqXHR0, jqXHR1.done(function(data0, data1){
+				console.log(data0);
+				console.log(data1);
+				console.log("-----------------------------------------------------");
+				console.log(data0[0]);
+				console.log(data1[0]);
+				console.log("-----------------------------------------------------");
+				
+				var obj0 = JSON.parse(data0[0]);
+				var obj1 = JSON.parse(data1[0]);
+				console.log(obj0);
+				console.log(obj1);
+				
+				var totalCount = obj0.contacts.length + obj1.contacts.length;
+				
+				console.log("2번의 요청으로 조회된 데이터 건수의 합: " + totalCount);
+			});
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

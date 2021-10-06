@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<button type="button" onclick="reqList();">조회</button>
+	<button type="button" onclick="delList();">삭제</button>
+	<p id="resp"></p>
+	<script>
+		//Ajax 전역 이벤트 함수 등록
+		$(document).ready(function() {
+			$(document).ajaxStop(function() {
+				console.log("ajaxStop");
+			});
+			
+			//모든 Ajax에 대한 timeout이 1900으로 설정됨
+			//모든 Ajax에 대한 전역 이벤트 함수 호출을 하지 않음
+			$.ajaxSetup({
+				timeout : 1900,
+				global : false, //전역 이벤트 함수 발생 옵션(true: 발생, false: 발생하지 않음)
+				error : function(jqXHR, status, error) {
+					console.log(error);
+				}
+			});
+		}); 
+	
+		function reqList() {	
+			$.get("/contact/list_long.do", function(data) {
+				console.log(data);
+			});
+			
+			$.get("/contact/list_long.do", function(data) {
+				console.log(data);
+			});
+			
+			$.get("/contact/list.do", function(data) {
+				console.log(data);
+			});
+			
+		}
+		
+		function delList() {
+			//p요소 초기화
+			$("#resp").html("");
+		}
+	</script>
+</body>
+</html>

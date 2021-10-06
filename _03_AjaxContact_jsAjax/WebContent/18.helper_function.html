@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<form id="f1">
+		이름 : <input type="text" id="name" name="name"><br>
+		성별 : 
+		 남 <input type="radio" class="gender" name="gender" value="M" checked/>
+		 여 <input type="radio" class="gender" name="gender" value="F" checked/><br>
+		연령대 :
+		 <select id="age" name="age">
+		 	<option value="" selected>--연령대를 선택하세요--</option>
+		 	<option value="10">~19</option>
+		 	<option value="20">20~29</option>
+		 	<option value="30">30~39</option>
+		 	<option value="40">40~49</option>
+		 	<option value="50">50~59</option>
+		 	<option value="60">60~</option>
+		 </select>
+	</form>
+	<button type="button" id="save">저장</button>
+	<script>
+		$(document).ready(function() {
+			$("#save").click(function() {
+				//1) 인코딩된 폼 데이터 생성(x-www-form-urlencoded)
+				var param = $("#f1").serialize();
+				console.log(param);
+				console.log("-------------------------------------------------------------------");
+				
+				//2) 폼의 입력 필드를 배열 객체로 변환
+				var paramArr = $("#f1").serializeArray();
+				console.log(paramArr);
+				//json 문자열로 변환
+				console.log(JSON.stringify(paramArr));
+				//배열 객체를 인코딩된 폼 데이터로 변환(x-www-form-urlencoded)
+				console.log($.param(paramArr));
+				console.log("-------------------------------------------------------------------");
+				
+				//3) 객체 생성
+				var paramObj = {
+						name : "홍길동",
+						gender : "M",
+						age : 10
+				};
+				console.log(paramObj);
+				//객체를 인코딩된 폼 데이터로 변환(x-www-form-urlencoded)
+				console.log($.param(paramObj));
+			});
+		});
+	</script>
+</body>
+</html>

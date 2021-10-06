@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.6.0.min.js"></script>
+<title>Ajax 사용 - </title>
+</head>
+<body>
+	<form id="f1">
+		이름 :<input type="text" id="name" name="name"><br>
+		전화 :<input type="text" id="tel" name="tel"><br>
+		주소  :<input type="text" id="address" name="address"><br>
+			
+	</form>
+	<button type="button" id="save">저장</button>
+	<script>
+		$(document).ready(function() {
+			$("#save").click(function() {	
+				//1) 인코딩 된 폼 데이터 생성( x-www-form-urlencoded)
+				var param = $("#f1").serialize();
+				
+				//ajax 호출
+				$.ajax({
+					//요청 서비스 url 지정
+					url : "/contact/add.do",
+					//메소드 타입 지정
+					type : "POST",
+					//요청 시 서버로 전달할 데이터 지정
+					data : { no : 65, name : "유역비", tel : "010-1111-2222", address : "중국" },
+					//요청 성공 시 동작할 콜백 함수 지정
+					success : function(data) {
+						console.log(data);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

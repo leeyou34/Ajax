@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lib/jpaginate/style.css">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="lib/jpaginate/jQuery.paginate.js"></script>
+<title>Ajax 사용 - GET방식</title>
+</head>
+<body>
+	<div id="container">
+		<h1>jPaginate 테스트</h1>
+		<div>
+			현재 페이지 : <span id="currentPage">1</span>
+		</div>
+		<div id="paging"></div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$("#paging").paginate({
+				count : 100,
+				start : 1,
+				display : 10,
+				border : true, 
+				border_color: "#333333",
+				text_color : "#000000",
+				background_color : "gold",
+				border_hover_color : "#000",
+				background_hover_color : "#fff",
+				images: false,
+				mouse : "press",
+				onChange : function(page) {
+					$("#currentPage").html(page);
+				}
+			});
+		});
+	</script>
+</body>
+</html>
