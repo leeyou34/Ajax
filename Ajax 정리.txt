@@ -130,7 +130,7 @@
              $.get({
                  settings
              });
-             ex) $get({
+             ex) $.get({
                     url : "contact/list.do",
                     data : { pageno : 1, pagesize : 5 },
                     success : function(data) {
@@ -144,3 +144,143 @@
                   settings
               });
    $.getJSON() : GET 방식으로 JSON 형식의 인코딩된 데이터를 로딩
+   $.getScript() : GET 방식으로 서버로부터 자바스크립트 파일을 로딩한 후 실행
+   load() : 서버로부터 응답받은 데이터를 선택된 HTML 요소의 콘텐츠로 대체
+
+8. jqXHR(Jquery XMLHTTPRequest) 객체
+ - Jquery에서 제공하는 XHR 객체를 의미
+ - 기존의 XHR 객체를 jqXHR객체 대체해서 사용 가능
+ - 기존의 XHR 객체에서 처리하던 HTTP 요청 헤더, 타임아웃 등을 처리할 수 있음
+ - 추가로 요청 콜백도 처리 가능(ajax에서 사용하던 콜백 함수와 동일한 기능들의 콜백이 존재)
+ - jqXHR 콜백 함수
+   .done() : $.ajax()의 success 콜백 기능(요청 성공 시에 실행)
+   ex) jqXHR.done(function(data, status, xhr) {
+            console.log(data);
+       });
+   .fail() : $.ajax()의 error 콜백 기능(요청 실패 시에 실행)
+   ex) jqXHR.fail(function(xhr, status, error) {
+            console.log(status);
+       });
+   .always() : $.ajax()의 complete 콜백 기능(요청 완료 시에 실행, 요청의 성공/실패 여부와 관계없이 실행)
+   ex) jqXHR.always(function() {
+            console.log("always");
+       });
+
+9. 콜백 지옥
+ - ajax 여러 개를 순서에 맞게 호출하려면 success 콜백에서 다음 ajax를 호출
+ - $.get("/contact/list_long.do", { pageno : 1 }, function(data) {
+        console.log("page1 success : " + (new Date()).toLocaleTimeString());
+        console.log(data);
+        
+        console.log("Send Page2");
+        //두 번째 ajax 호출
+        $.get("/contact/list_long.do", { pageno : 2 }, function(data) {
+            console.log("page2 success : " + (new Date()).toLocaleTimeString());
+            console.log(data);
+            
+            console.log("Send Page3");
+            //세 번째 ajax 호출
+            $.get("contact/list_long.do", { pageno : 3 }, function(data) {
+                console.log("page3 success : " + (new Date()).toLocaleTimeString());
+                console.log(data);
+            });
+        });
+    });
+ - ajax를 중첩해서 사용하면 소스코드가 복잡해져서 가독성이 떨어지고 예외처리까지 추가될 경우에는
+   디버깅 또한 어려워짐
+ - 이러한 현상을 콜백 지옥이라고 합니다.
+
+10. Jquery Promise 객체
+ - Promise 객체는 비동기 방식의 통신에서 발생하는 에러를 해결하기 위해 사용하는 객체
+ - 비동기 방식에서는 가끔 서버에서 데이터를 다 받아오기전에 화면에 표출하려고 하는 문제가 발생하는데
+   이러한 문제들이나 콜백 지옥 같은 문제들을 해결하는 데 Promise 객체를 사용하게 됨
+ - Promise 객체를 통한 콜백 지옥 해결
+   ajax를 호출하고 리턴 받는 jqXHR 객체를 통해 새로운 ajax를 추가해주고
+   .then() 메소드를 통해서 다음 ajax를 호출하도록 설정
+    ajax1------>
+                ajax2------>
+                            ajax3
+
+
+11. Jquery when() 메소드
+ - when() 메소드는 ajax의 결과를 리턴받아 콜백을 처리해주는데 여러개의 요청을 보낸 후
+   모든 응답이 왔을 때 콜백 함수를 처리한다.
+ - when() 메소드는 주로 여러 개의 ajax 요청을 보낼 때 사용
+ - $.when(ajax1, ajax2, ajax3).done(function(resp1, resp2, resp3) {
+        ...
+   });
+   ajax1------------------->
+   ajax2----->               모든 응답이 들어왔을 때 .done() 메소드에서 콜백 처리
+   ajax3----------->
+
+12. 헬퍼 함수
+ - ajax 서버로 요청을 보낼 때 전송되는 기본 데이터 형식은 x-www-form-urlencoded 형식
+ - 한글 및 특수문자는 url encode를 직접해줘서 유니코드로 변경을 해줘야됨
+ - 사용자로부터 입력받을 경우가 많을 경우에는 직접 x-www-form-urlencoded 형식으로 만들어
+   주는 게 귀찮고 어렵습니다.
+ - 헬퍼 함수의 역할은 사용자 입력 필드의 데이터를 x-www-form-urlencoded 형식으로 간단하게
+   만들어 줌
+ - 헬퍼 함수를 사용할 때는 input의 name속성과 매핑되기 때문에 항상 name속성을 지정해줘야됨
+   name속성을 지정하지 않으면 빈 값으로 데이터가 넘어감
+ - 헬퍼 함수를 사용할 때는 항상 form요소를 선택해서 사용해야됨(serialize(), serializeArray())
+ - 헬퍼 함수의 종류
+   serialize() : 선택된 폼 요소의 입력 필드 name속성을 이용해 인코딩된 폼 데이터 생성
+                 x-www-form-encoded 형식의 문자열로 데이터 만들어줌
+   ex) $("#form").serialize();
+       결과 값 : name=%ED%99%8D%EA%B8%B8%EB%8F%99&gender=M&age=10
+   serializeArray() : 선택된 폼 요소의 입력 필드 name속성을 이용해 객체로 구성된 배열 생성
+   ex) $("#form").serializeArray();
+       결과 값 : [
+                    { name : "name", value : "홍길동" },
+                    { name : "gender", value : "M" },
+                    { name : "age", value : 10 }
+                ]
+   $.param() : 객체 배열이나 객체를 인코딩된 폼 데이터로 만들어주는 메소드
+   ex) var param1 = $("#form").serializeArray();
+       var param2 = {
+           name : "홍길동",
+           gender : "M",
+           age : 10
+       }
+       $.param(param1);
+       $.param(param2);
+       결과 값 : name=%ED%99%8D%EA%B8%B8%EB%8F%99&gender=M&age=10
+
+13. Ajax 전역 이벤트 함수
+ - Ajax 전역 이벤트 함수는 콜백에서 사용되는 공통적인 코드를 관리하고 사용하도록 구성
+ - Ajax 전역 이벤트 함수의 종류
+   ajaxStart(handler) : 처리중이 ajax요청이 없는 상태에서 처음 ajax 요청이 일어날 때 발생되는 이벤트.
+                        이미 ajax요청이 진행중이면 실행되지 않음
+                        ex) $(document).ajaxStart(function() {
+                                console.log("ajaxStart");
+                            });
+   ajaxSend(handler) : 각각의 ajax요청이 전송되기 전에 발생되는 이벤트
+                       다른 ajax요청이 진행중인 상태에서도 실행됨
+                       ex) $(document).ajaxSend(function(event, xhr, options) {
+                                console.log("ajaxSend");
+                           });
+                           event : event 객체
+                           options : ajax 호출 시 설정한 설정 값들
+   ajaxSuccess(handler) : ajax요청이 성공일 때 실행되는 이벤트
+                          ex) $(document).ajaxSuccess(function(event, xhr, options, data) {
+                                    console.log("ajaxSuccess");
+                              });
+                              data : 서버로부터 응답받은 데이터
+   ajaxError(handler) : ajax요청이 실패했을 때 발생되는 이벤트
+                        ex) $(document).ajaxError(function(event, xhr, options, error) {
+                                console.log("ajaxError");
+                            });
+                            error : 발생된 오류 메시지
+   ajaxComplete(handler) : ajax요청이 완료됐을 때 발생되는 이벤트, 성공/실패 여부와 관계없이 실행
+                           ex) $(document).ajaxComplete(function(event, xhr, options) {
+                                   console.log("ajaxComplete");
+                               });
+   ajaxStop(handler) : 처리중인 ajax요청이 모두 완료된 상태가 되었을 때 발생되는 이벤트
+                       ex)$(document).ajaxStop(function() {
+                                console.log("ajaxStop");
+                          });
+ - Ajax 전역 이벤트 함수와 Ajax 로컬 콜백 함수의 시점
+   Ajax 요청이 성공일 때 : 전역 이벤트 함수  ajaxStart    ------->     ajaxSend    ------->   ajaxSuccess   ------->   ajaxComplete   ------->   ajaxStop
+                          로컬 콜백 함수                beforeSend    ------->    success     ------->     complete     ------->
+   Ajax 요청이 실패일 때 : 전역 이벤트 함수  ajaxStart    ------->     ajaxSend    ------->    ajaxError    ------->   ajaxComplete   ------->   ajaxStop
+                          로컬 콜백 함수                beforeSend    ------->     error      ------->     complete     ------->
