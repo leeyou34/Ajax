@@ -1,0 +1,47 @@
+---1) waitme---
+
+<link rel="stylesheet" href="lib/waitme/waitMe.css"/>
+<script src="http://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="lib/waitme/waitMe.js"></script>
+
+---2) jpaginate---
+
+<link rel="stylesheet" type="text/css" href="lib/jpaginate/style.css"/>
+<script src="http://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="lib/jpaginate/jQuery.paginate.js"></script>
+
+---3) jsRender---
+
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.js"></script>
+
+
+---4) jQuery UI Dialog---
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/humanity/jquery-ui.css"/>
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+
+---5) Contact App---
+
+<link rel="stylesheet" type="text/css" href="lib/jpaginate/style.css"/>
+<link rel="stylesheet" type="text/css" href="lib/waitme/waitMe.css"/>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/humanity/jquery-ui.css"/>
+<style>
+	body{
+		font-size:75%;
+	}
+	input.text{
+		margin-bottom:12px;
+		width:95%;
+		padding:.4em;
+	}
+</style>
+<script src="http://code.jquery.com/jquery-3.1.0.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<script src="lib/waitme/waitMe.js"></script>
+<script src="lib/jpaginate/jQuery.paginate.js"></script>
+
+
